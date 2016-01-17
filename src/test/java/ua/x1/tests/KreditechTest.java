@@ -1,7 +1,20 @@
 package ua.x1.tests;
 
-import static ua.x1.commonmethods.and.steps.CommonMethods.*;
+import static ua.x1.commonmethods.and.steps.CommonMethods.closeCurrentWindow;
+import static ua.x1.commonmethods.and.steps.CommonMethods.getPageTitle;
+import static ua.x1.commonmethods.and.steps.CommonMethods.switchToFrame;
+import static ua.x1.commonmethods.and.steps.CommonMethods.switchToWindow;
+import static ua.x1.commonmethods.and.steps.CommonMethods.takeScreenshotAndSaveFile;
 import static ua.x1.constants.Constants.*;
+import static ua.x1.constants.Constants.FACEBOOK_EMAIL;
+import static ua.x1.constants.Constants.IMAGES_FOLDER_PATH;
+import static ua.x1.constants.Constants.IMAGE_EXTENSION;
+import static ua.x1.constants.Constants.KREDITECH_PAGE_URL;
+import static ua.x1.constants.Constants.QUERY_STRING;
+import static ua.x1.constants.Constants.TWITTER_EMAIL;
+import static ua.x1.constants.Constants.TWITTER_PASSWORD;
+import static ua.x1.constants.Constants.XPATH_FOR_FACEBOOK_IFRAME;
+import static ua.x1.constants.Constants.XPATH_FOR_TWITTER_IFRAME;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +27,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import ua.x1.utils.BaseTest;
+
 @RunWith(Parameterized.class)
 public class KreditechTest extends BaseTest {
 
@@ -23,9 +38,11 @@ public class KreditechTest extends BaseTest {
     @Before
     public void before() {
         googleSteps.searchRequest(QUERY_STRING);
+        log.info("Send request: "+ QUERY_STRING);
         googleSteps.listOfCiteLinksShouldBeDisplayed();
 
         googleSteps.clickOnKreditechPageUrl();
+        log.info("Click on Kreditech url");
         kreditechMainSteps.kreditechImageShouldBeOnThePage();
     }
 
@@ -36,48 +53,55 @@ public class KreditechTest extends BaseTest {
     @Parameters
     public static Collection<Object[]> testData() {
         return Arrays.asList(new Object[][] {
-                // { "" }, // for Kreditech Home Page
-                { WHAT_WE_DO_LINK_HREF },
-                // { WHO_WE_ARE_LINK_HREF },
-                // { CAREERS_LINK_HREF },
-                // { INVESTOR_RELATIONS_LINK_HREF },
-                { NEWS_LINK_HREF }
-        // ,
-        // { BLOG_LINK_HREF },
-        // { CONTACT_LINK_HREF }
+                 { "" }, // for Kreditech Home Page
+                 { WHAT_WE_DO_LINK_HREF },
+                 { WHO_WE_ARE_LINK_HREF },
+                 { CAREERS_LINK_HREF },
+                 { INVESTOR_RELATIONS_LINK_HREF },
+                 { NEWS_LINK_HREF },
+                 { BLOG_LINK_HREF },
+                 { CONTACT_LINK_HREF }
                 });
     }
 
     @Test
-    public void navigateOnEachItemBarPage() {
+    public void navigateSaveScreenshotOnItemBarAndSharePostViaSocNet() {
         kreditechMainSteps.kreditechNavigationBarLinksShouldDisplayOnThePage();
-        String fullHref = KREDITECH_PAGE_URL.concat(textOfHrefOfEachItemBar);
+        String fullHref = KREDITECH_PAGE_URL+textOfHrefOfEachItemBar;
         kreditechMainSteps.clickOnKreditechItemBarByLinkHref(fullHref);
+        log.info("Click on Kreditech Navigation Item Bar by link "+fullHref);
         kreditechMainSteps.kreditechNavigationBarLinksShouldDisplayOnThePage();
         pageTitle = getPageTitle(driver);
-    }
-
-    @After
-    public void savingScreenShot() {
+        
         kreditechMainSteps.scrollDownToKreditechFooter(driver);
-        takeScreenshotAndSaveFile(driver, IMAGE_FOLDER_PATH, pageTitle.concat(IMAGE_EXTENSION));
+        takeScreenshotAndSaveFile(driver, IMAGES_FOLDER_PATH, pageTitle+IMAGE_EXTENSION);
+        log.info("Scroll down to Kreditech footer and take a screenshot");
         Set<String> oldWindowHandles = driver.getWindowHandles();
-        switchToFrame(driver, 0);
+        switchToFrame(driver, XPATH_FOR_FACEBOOK_IFRAME);
 
         kreditechMainSteps.clickOnFacebookShareButtonAndSwitchToNewWindow(driver, oldWindowHandles);
+        log.info("Click on Facebook share button");
         facebookSteps.login(FACEBOOK_EMAIL, FACEBOOK_EMAIL);
+        log.info("Log in Facebook");
         facebookSteps.shouldSeeLoginErrorBox();
+        log.info("Should see login error box on Facebook login page");
         closeCurrentWindow(driver);
 
         switchToWindow(driver, oldWindowHandles.iterator().next());
         oldWindowHandles = driver.getWindowHandles();
-        switchToFrame(driver, 1);
+        switchToFrame(driver, XPATH_FOR_TWITTER_IFRAME);
 
         kreditechMainSteps.clickOnTwitterShareButton(driver, oldWindowHandles);
+        log.info("Click on Twitter share button");
         twitterSteps.login(TWITTER_EMAIL, TWITTER_PASSWORD);
+        log.info("Log in Twitter");
         twitterSteps.shouldSeeLoginErrorBox();
-        closeCurrentWindow(driver);
+        log.info("Should see login error box on Facebook login page");
+    }
 
+    @After
+    public void after() {
+        closeCurrentWindow(driver);
     }
 
 }

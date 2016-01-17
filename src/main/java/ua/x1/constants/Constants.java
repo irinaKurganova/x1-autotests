@@ -36,7 +36,7 @@ public class Constants {
 
     public static final String IMAGE_EXTENSION = ".png";
 
-    public static final String IMAGE_FOLDER_PATH = "src\\test\\resources\\";
+    public static final String IMAGES_FOLDER_PATH = "target\\images\\";
 
     public static final String FACEBOOK_EMAIL = "emailfacebook@ukr.net";
 
@@ -45,5 +45,9 @@ public class Constants {
     public static final String TWITTER_EMAIL = "aaa@gmail.com";
 
     public static final String TWITTER_PASSWORD = "qa654321";
+    
+    public static final String XPATH_FOR_FACEBOOK_IFRAME = "//iframe[contains(@src,'facebook')]";
+    
+    public static final String XPATH_FOR_TWITTER_IFRAME = "//iframe[contains(@class,'twitter-timeline')]";
 
 }

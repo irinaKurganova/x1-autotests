@@ -18,8 +18,7 @@ public class KreditechMainPage {
     private KreditechHomeShowBlock kreditechHomeShowBlock;
 
     private KreditechFooterBlock kreditechFooterBlock;
-    
-    
+
     @Name("Facebook share button")
     @FindBy(xpath = "//a[contains(@href,'/sharer/')]")
     private Button facebookShareButton;
@@ -27,10 +26,6 @@ public class KreditechMainPage {
     @Name("Twitter share link")
     @FindBy(xpath = "//a[contains(@class,'follow-button')]")
     private HtmlElement twitterShareLink;
-
-    @Name("Youtube share link")
-    @FindBy(xpath = "//button[contains(@class,'ytp-share-button')]")
-    private HtmlElement youtubeShareLink;
 
     public KreditechMainPage(WebDriver driver) {
         HtmlElementLoader.populatePageObject(this, driver);
@@ -48,7 +43,6 @@ public class KreditechMainPage {
         return kreditechFooterBlock;
     }
 
-    
     public Button getFacebookShareButton() {
         return facebookShareButton;
     }
@@ -57,7 +51,4 @@ public class KreditechMainPage {
         return twitterShareLink;
     }
 
-    public HtmlElement getYoutubeShareLink() {
-        return youtubeShareLink;
-    }
 }

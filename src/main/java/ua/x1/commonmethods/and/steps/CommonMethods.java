@@ -1,12 +1,9 @@
 package ua.x1.commonmethods.and.steps;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import static org.openqa.selenium.By.tagName;
 import static ru.yandex.qatools.htmlelements.matchers.MatcherDecorators.should;
 import static ru.yandex.qatools.htmlelements.matchers.MatcherDecorators.timeoutHasExpired;
 import static ru.yandex.qatools.htmlelements.matchers.common.DoesElementExistMatcher.exists;
@@ -18,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import static org.openqa.selenium.By.*;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -33,7 +32,7 @@ public class CommonMethods {
 
     private final static long TIMEOUT_WAITING_ELEMENT = SECONDS.toMillis(30);
 
-    private final static long TIMEOUT_WAITING_LIST_OF_ELEMENTS = SECONDS.toMillis(60);
+    private static final Logger log = Logger.getLogger(CommonMethods.class);
 
     public static void elementShouldExistOnThePage(WebElement link) {
         assertThat("Element does not exist on the page.", link,
@@ -62,6 +61,14 @@ public class CommonMethods {
         element.click();
     }
 
+    /**
+     * This method clicks on link that equal to text
+     * 
+     * @param listOfLinks
+     *            - list of links
+     * @param expectedHref
+     *            - href attribute of link
+     */
     public static void clickOnLinkThatEqualText(List<Link> listOfLinks, String expectedHref) {
         for (Link link : listOfLinks) {
             elementShouldExistOnThePage(link.getWrappedElement());
@@ -70,21 +77,6 @@ public class CommonMethods {
                 break;
             }
         }
-    }
-
-    public static String getLinkTextFromListByLinkHref(List<Link> listOfLinks, String expectedHref) {
-        String linkText = "";
-        for (Link link : listOfLinks) {
-            if (expectedHref.equals(link.getReference())) {
-                linkText = link.getText();
-                break;
-            }
-        }
-        return linkText;
-    }
-
-    public static void shouldSeeTitleOfPage(WebDriver driver, String expectedTitle) {
-        assertThat("The actual page title does not equal to expected title.", driver.getTitle(), equalTo(expectedTitle));
     }
 
     public static void openPage(WebDriver driver, String url) {
@@ -99,6 +91,13 @@ public class CommonMethods {
         return driver.getTitle();
     }
 
+    /**
+     * This method scroll down on the page and wait until element is visible
+     * 
+     * @param driver
+     * @param element
+     *            - htmlElement
+     */
     public static void scrollDownAndWaithUntilElementVisible(WebDriver driver, HtmlElement element) {
         for (int i = 1; i < 10 && element.isDisplayed(); i++) {
             waitUntilPageLoad(driver);
@@ -113,29 +112,47 @@ public class CommonMethods {
         driver.manage().timeouts().pageLoadTimeout(TIMEOUT_WAITING_ELEMENT, SECONDS);
     }
 
-    public static void takeScreenshotAndSaveFile(WebDriver driver, String fileName, String pathToSaveFile) {
+    /**
+     * This method takes screenshot and save as image
+     * 
+     * @param driver
+     * @param pathToSaveFile
+     *            - path where image should be saved
+     * @param fileName
+     *            - image name
+     */
+    public static void takeScreenshotAndSaveFile(WebDriver driver, String pathToSaveFile, String fileName) {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(scrFile, new File(pathToSaveFile + fileName));
+            FileUtils.copyFile(scrFile, new File(pathToSaveFile, fileName));
         } catch (IOException e) {
+            log.info("File not found.");
         }
     }
 
-    public static WebElement getElementFromList(List<WebElement> listOfElements, String listName, int elementNumber) {
-        assertThat(
-                listName + " or empty or does not contain element by specific element number.",
-                listOfElements,
-                should(not(hasSize(lessThanOrEqualTo(elementNumber)))).whileWaitingUntil(
-                        timeoutHasExpired(TIMEOUT_WAITING_LIST_OF_ELEMENTS)));
-        return listOfElements.get(elementNumber);
+    /**
+     * This method help to switch to frame
+     * 
+     * @param driver
+     * @param xpath
+     */
+    public static void switchToFrame(WebDriver driver, String xpath) {
+        WebElement element = driver.findElement(xpath(xpath));
+        elementShouldExistOnThePage(element);
+        driver.switchTo().frame(element);
     }
 
-    public static void switchToFrame(WebDriver driver, int index) {
-        driver.switchTo().frame(getElementFromList(driver.findElements(tagName("iframe")), "Iframe list ", index));
-    }
-
+    /**
+     * This method gets new window handle
+     * 
+     * @param driver
+     * @param oldWindowHandles
+     *            - old windows
+     * @return new handle as string
+     */
     public static String getNewWindowHandle(WebDriver driver, Set<String> oldWindowHandles) {
         String newHandle = "";
+        waitUntilPageLoad(driver);
         Set<String> newWindowHandles = driver.getWindowHandles();
         if (newWindowHandles != null) {
             newWindowHandles.removeAll(oldWindowHandles);

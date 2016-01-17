@@ -1,4 +1,4 @@
-package ua.x1.tests;
+package ua.x1.utils;
 
 import static ua.x1.commonmethods.and.steps.CommonMethods.maximizeWindow;
 import static ua.x1.commonmethods.and.steps.CommonMethods.openPage;
@@ -11,6 +11,7 @@ import static ua.x1.constants.Constants.WEBDRIVER_CHROME_SYSTEM_PROPERTY;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
@@ -29,10 +30,12 @@ public class BaseTest {
     protected GoogleSteps googleSteps = null;
 
     protected KreditechMainSteps kreditechMainSteps = null;
-    
+
     protected FacebookSteps facebookSteps = null;
-    
+
     protected TwitterSteps twitterSteps = null;
+
+    protected static final Logger log = Logger.getLogger(BaseTest.class);
 
     @Before
     public void init() {
@@ -45,6 +48,8 @@ public class BaseTest {
         }
         maximizeWindow(driver);
         openPage(driver, GOOGLE_PAGE_URL);
+        log.info("Open Google.com page");
+
         googleSteps = new GoogleSteps(driver);
         kreditechMainSteps = new KreditechMainSteps(driver);
         facebookSteps = new FacebookSteps(driver);
