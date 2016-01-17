@@ -11,26 +11,20 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 @FindBy(xpath = "//div[@class='tsf-p']")
 public class SearchBlock extends HtmlElement {
 
-	@Name("Search textField")
-	@FindBy(xpath = ".//input[@id='lst-ib']")
-	private TextInput searchTextField;
+    @Name("Search textField")
+    @FindBy(xpath = ".//input[@id='lst-ib']")
+    private TextInput searchTextField;
 
-	@Name("Search button")
-	@FindBy(xpath = ".//button[@type='submit']")
-	private Button searchButton;
+    @Name("Search button")
+    @FindBy(xpath = ".//button[@type='submit']")
+    private Button searchButton;
 
-	public void searchFor(String request) {
-		searchTextField.clear();
-		searchTextField.sendKeys(request);
-		searchButton.click();
-	}
+    public TextInput getSearchTextField() {
+        return searchTextField;
+    }
 
-	public TextInput getSearchTextField() {
-		return searchTextField;
-	}
-
-	public Button getSearchButton() {
-		return searchButton;
-	}
+    public Button getSearchButton() {
+        return searchButton;
+    }
 
 }
