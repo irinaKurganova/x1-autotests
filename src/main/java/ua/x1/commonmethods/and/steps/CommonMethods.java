@@ -1,10 +1,12 @@
-package ua.x1.commonmethods;
+package ua.x1.commonmethods.and.steps;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.openqa.selenium.By.tagName;
 import static ru.yandex.qatools.htmlelements.matchers.MatcherDecorators.should;
 import static ru.yandex.qatools.htmlelements.matchers.MatcherDecorators.timeoutHasExpired;
 import static ru.yandex.qatools.htmlelements.matchers.common.DoesElementExistMatcher.exists;
@@ -13,6 +15,7 @@ import static ua.x1.constants.Constants.FIRST_ELEMENT;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.JavascriptExecutor;
@@ -29,6 +32,8 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 public class CommonMethods {
 
     private final static long TIMEOUT_WAITING_ELEMENT = SECONDS.toMillis(30);
+
+    private final static long TIMEOUT_WAITING_LIST_OF_ELEMENTS = SECONDS.toMillis(60);
 
     public static void elementShouldExistOnThePage(WebElement link) {
         assertThat("Element does not exist on the page.", link,
@@ -52,6 +57,11 @@ public class CommonMethods {
         button.click();
     }
 
+    public static void clickOnHtmlElement(HtmlElement element) {
+        elementShouldExistOnThePage(element.getWrappedElement());
+        element.click();
+    }
+
     public static void clickOnLinkThatEqualText(List<Link> listOfLinks, String expectedHref) {
         for (Link link : listOfLinks) {
             elementShouldExistOnThePage(link.getWrappedElement());
@@ -72,11 +82,6 @@ public class CommonMethods {
         }
         return linkText;
     }
-
-    // public static List<String> extractListOfLinkToListOfString(
-    // List<Link> listOfLinks) {
-    // return extract(listOfLinks, on(Link.class).getText());
-    // }
 
     public static void shouldSeeTitleOfPage(WebDriver driver, String expectedTitle) {
         assertThat("The actual page title does not equal to expected title.", driver.getTitle(), equalTo(expectedTitle));
@@ -107,14 +112,46 @@ public class CommonMethods {
     public static void waitUntilPageLoad(WebDriver driver) {
         driver.manage().timeouts().pageLoadTimeout(TIMEOUT_WAITING_ELEMENT, SECONDS);
     }
-    
-    public static void takeScreenshotAndSaveFile(WebDriver driver, String fileName, String pathToSaveFile){
+
+    public static void takeScreenshotAndSaveFile(WebDriver driver, String fileName, String pathToSaveFile) {
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(scrFile, new File(pathToSaveFile + fileName));
         } catch (IOException e) {
-            // "Could not create browser snapshot: " ;
         }
+    }
+
+    public static WebElement getElementFromList(List<WebElement> listOfElements, String listName, int elementNumber) {
+        assertThat(
+                listName + " or empty or does not contain element by specific element number.",
+                listOfElements,
+                should(not(hasSize(lessThanOrEqualTo(elementNumber)))).whileWaitingUntil(
+                        timeoutHasExpired(TIMEOUT_WAITING_LIST_OF_ELEMENTS)));
+        return listOfElements.get(elementNumber);
+    }
+
+    public static void switchToFrame(WebDriver driver, int index) {
+        driver.switchTo().frame(getElementFromList(driver.findElements(tagName("iframe")), "Iframe list ", index));
+    }
+
+    public static String getNewWindowHandle(WebDriver driver, Set<String> oldWindowHandles) {
+        String newHandle = "";
+        Set<String> newWindowHandles = driver.getWindowHandles();
+        if (newWindowHandles != null) {
+            newWindowHandles.removeAll(oldWindowHandles);
+            if (!newWindowHandles.isEmpty()) {
+                newHandle = newWindowHandles.iterator().next();
+            }
+        }
+        return newHandle;
+    }
+
+    public static void switchToWindow(WebDriver driver, String window) {
+        driver.switchTo().window(window);
+    }
+
+    public static void closeCurrentWindow(WebDriver driver) {
+        driver.close();
     }
 
 }

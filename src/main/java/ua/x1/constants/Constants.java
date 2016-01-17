@@ -33,9 +33,17 @@ public class Constants {
     public static final String BLOG_LINK_HREF = "blog/";
 
     public static final String CONTACT_LINK_HREF = "contact/";
-    
+
     public static final String IMAGE_EXTENSION = ".png";
-    
+
     public static final String IMAGE_FOLDER_PATH = "src\\test\\resources\\";
+
+    public static final String FACEBOOK_EMAIL = "emailfacebook@ukr.net";
+
+    public static final String FACEBOOK_PASSWORD = "qa123456";
+
+    public static final String TWITTER_EMAIL = "aaa@gmail.com";
+
+    public static final String TWITTER_PASSWORD = "qa654321";
 
 }

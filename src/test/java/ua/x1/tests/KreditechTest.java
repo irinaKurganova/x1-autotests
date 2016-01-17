@@ -1,21 +1,11 @@
 package ua.x1.tests;
 
-import static ua.x1.commonmethods.CommonMethods.getPageTitle;
-import static ua.x1.commonmethods.CommonMethods.takeScreenshotAndSaveFile;
-import static ua.x1.constants.Constants.BLOG_LINK_HREF;
-import static ua.x1.constants.Constants.CAREERS_LINK_HREF;
-import static ua.x1.constants.Constants.CONTACT_LINK_HREF;
-import static ua.x1.constants.Constants.IMAGE_EXTENSION;
-import static ua.x1.constants.Constants.IMAGE_FOLDER_PATH;
-import static ua.x1.constants.Constants.INVESTOR_RELATIONS_LINK_HREF;
-import static ua.x1.constants.Constants.KREDITECH_PAGE_URL;
-import static ua.x1.constants.Constants.NEWS_LINK_HREF;
-import static ua.x1.constants.Constants.QUERY_STRING;
-import static ua.x1.constants.Constants.WHAT_WE_DO_LINK_HREF;
-import static ua.x1.constants.Constants.WHO_WE_ARE_LINK_HREF;
+import static ua.x1.commonmethods.and.steps.CommonMethods.*;
+import static ua.x1.constants.Constants.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,14 +36,15 @@ public class KreditechTest extends BaseTest {
     @Parameters
     public static Collection<Object[]> testData() {
         return Arrays.asList(new Object[][] {
-                { "" }, // for Kreditech Home Page
-                { WHAT_WE_DO_LINK_HREF }, 
-                { WHO_WE_ARE_LINK_HREF }, 
-                { CAREERS_LINK_HREF },
-                { INVESTOR_RELATIONS_LINK_HREF }, 
-                { NEWS_LINK_HREF }, 
-                { BLOG_LINK_HREF }, 
-                { CONTACT_LINK_HREF } 
+                // { "" }, // for Kreditech Home Page
+                { WHAT_WE_DO_LINK_HREF },
+                // { WHO_WE_ARE_LINK_HREF },
+                // { CAREERS_LINK_HREF },
+                // { INVESTOR_RELATIONS_LINK_HREF },
+                { NEWS_LINK_HREF }
+        // ,
+        // { BLOG_LINK_HREF },
+        // { CONTACT_LINK_HREF }
                 });
     }
 
@@ -69,7 +60,23 @@ public class KreditechTest extends BaseTest {
     @After
     public void savingScreenShot() {
         kreditechMainSteps.scrollDownToKreditechFooter(driver);
-        takeScreenshotAndSaveFile(driver, IMAGE_FOLDER_PATH, pageTitle.concat(IMAGE_EXTENSION) );
+        takeScreenshotAndSaveFile(driver, IMAGE_FOLDER_PATH, pageTitle.concat(IMAGE_EXTENSION));
+        Set<String> oldWindowHandles = driver.getWindowHandles();
+        switchToFrame(driver, 0);
+
+        kreditechMainSteps.clickOnFacebookShareButtonAndSwitchToNewWindow(driver, oldWindowHandles);
+        facebookSteps.login(FACEBOOK_EMAIL, FACEBOOK_EMAIL);
+        facebookSteps.shouldSeeLoginErrorBox();
+        closeCurrentWindow(driver);
+
+        switchToWindow(driver, oldWindowHandles.iterator().next());
+        oldWindowHandles = driver.getWindowHandles();
+        switchToFrame(driver, 1);
+
+        kreditechMainSteps.clickOnTwitterShareButton(driver, oldWindowHandles);
+        twitterSteps.login(TWITTER_EMAIL, TWITTER_PASSWORD);
+        twitterSteps.shouldSeeLoginErrorBox();
+        closeCurrentWindow(driver);
 
     }
 

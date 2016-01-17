@@ -1,4 +1,6 @@
-package ua.x1.commonmethods;
+package ua.x1.commonmethods.and.steps;
+
+import java.util.Set;
 
 import org.openqa.selenium.WebDriver;
 
@@ -28,6 +30,22 @@ public class KreditechMainSteps extends CommonMethods {
 
     public void scrollDownToKreditechFooter(WebDriver driver) {
         scrollDownAndWaithUntilElementVisible(driver, kreditechMainPage.getKreditechFooterBlock().getCopyrightElement());
+    }
+
+    public void clickOnFacebookShareButtonAndSwitchToNewWindow(WebDriver driver, Set<String> oldWindowHandles) {
+        clickOnButton(kreditechMainPage.getFacebookShareButton());
+        switchToWindow(driver, getNewWindowHandle(driver, oldWindowHandles));
+        maximizeWindow(driver);
+    }
+
+    public void clickOnTwitterShareButton(WebDriver driver, Set<String> oldWindowHandles) {
+        clickOnHtmlElement(kreditechMainPage.getTwitterShareLink());
+        switchToWindow(driver, getNewWindowHandle(driver, oldWindowHandles));
+        maximizeWindow(driver);
+    }
+
+    public void clickOnYoutubeShareButton() {
+        clickOnHtmlElement(kreditechMainPage.getYoutubeShareLink());
     }
 
 }

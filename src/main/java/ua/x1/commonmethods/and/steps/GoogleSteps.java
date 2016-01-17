@@ -1,4 +1,4 @@
-package ua.x1.commonmethods;
+package ua.x1.commonmethods.and.steps;
 
 import static ua.x1.constants.Constants.KREDITECH_PAGE_URL;
 
