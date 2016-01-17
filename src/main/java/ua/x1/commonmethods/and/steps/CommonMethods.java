@@ -31,6 +31,8 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 public class CommonMethods {
 
     private final static long TIMEOUT_WAITING_ELEMENT = SECONDS.toMillis(30);
+    
+    private final static long TIMEOUT_WAITING_PAGE_LOAD = SECONDS.toMillis(60);
 
     private static final Logger log = Logger.getLogger(CommonMethods.class);
 
@@ -109,7 +111,7 @@ public class CommonMethods {
     }
 
     public static void waitUntilPageLoad(WebDriver driver) {
-        driver.manage().timeouts().pageLoadTimeout(TIMEOUT_WAITING_ELEMENT, SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(TIMEOUT_WAITING_PAGE_LOAD, SECONDS);
     }
 
     /**

@@ -36,14 +36,12 @@ public class KreditechMainSteps extends CommonMethods {
         clickOnButton(kreditechMainPage.getFacebookShareButton());
         waitUntilPageLoad(driver);
         switchToWindow(driver, getNewWindowHandle(driver, oldWindowHandles));
-//        maximizeWindow(driver);
     }
 
     public void clickOnTwitterShareButton(WebDriver driver, Set<String> oldWindowHandles) {
         clickOnHtmlElement(kreditechMainPage.getTwitterShareLink());
         waitUntilPageLoad(driver);
         switchToWindow(driver, getNewWindowHandle(driver, oldWindowHandles));
-        maximizeWindow(driver);
     }
 
 }

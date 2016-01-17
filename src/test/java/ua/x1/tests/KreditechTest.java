@@ -5,14 +5,21 @@ import static ua.x1.commonmethods.and.steps.CommonMethods.getPageTitle;
 import static ua.x1.commonmethods.and.steps.CommonMethods.switchToFrame;
 import static ua.x1.commonmethods.and.steps.CommonMethods.switchToWindow;
 import static ua.x1.commonmethods.and.steps.CommonMethods.takeScreenshotAndSaveFile;
-import static ua.x1.constants.Constants.*;
+import static ua.x1.commonmethods.and.steps.CommonMethods.waitUntilPageLoad;
+import static ua.x1.constants.Constants.BLOG_LINK_HREF;
+import static ua.x1.constants.Constants.CAREERS_LINK_HREF;
+import static ua.x1.constants.Constants.CONTACT_LINK_HREF;
 import static ua.x1.constants.Constants.FACEBOOK_EMAIL;
 import static ua.x1.constants.Constants.IMAGES_FOLDER_PATH;
 import static ua.x1.constants.Constants.IMAGE_EXTENSION;
+import static ua.x1.constants.Constants.INVESTOR_RELATIONS_LINK_HREF;
 import static ua.x1.constants.Constants.KREDITECH_PAGE_URL;
+import static ua.x1.constants.Constants.NEWS_LINK_HREF;
 import static ua.x1.constants.Constants.QUERY_STRING;
 import static ua.x1.constants.Constants.TWITTER_EMAIL;
 import static ua.x1.constants.Constants.TWITTER_PASSWORD;
+import static ua.x1.constants.Constants.WHAT_WE_DO_LINK_HREF;
+import static ua.x1.constants.Constants.WHO_WE_ARE_LINK_HREF;
 import static ua.x1.constants.Constants.XPATH_FOR_FACEBOOK_IFRAME;
 import static ua.x1.constants.Constants.XPATH_FOR_TWITTER_IFRAME;
 
@@ -70,6 +77,7 @@ public class KreditechTest extends BaseTest {
         String fullHref = KREDITECH_PAGE_URL+textOfHrefOfEachItemBar;
         kreditechMainSteps.clickOnKreditechItemBarByLinkHref(fullHref);
         log.info("Click on Kreditech Navigation Item Bar by link "+fullHref);
+        waitUntilPageLoad(driver);
         kreditechMainSteps.kreditechNavigationBarLinksShouldDisplayOnThePage();
         pageTitle = getPageTitle(driver);
         
@@ -83,6 +91,7 @@ public class KreditechTest extends BaseTest {
         log.info("Click on Facebook share button");
         facebookSteps.login(FACEBOOK_EMAIL, FACEBOOK_EMAIL);
         log.info("Log in Facebook");
+        waitUntilPageLoad(driver);
         facebookSteps.shouldSeeLoginErrorBox();
         log.info("Should see login error box on Facebook login page");
         closeCurrentWindow(driver);
@@ -95,6 +104,7 @@ public class KreditechTest extends BaseTest {
         log.info("Click on Twitter share button");
         twitterSteps.login(TWITTER_EMAIL, TWITTER_PASSWORD);
         log.info("Log in Twitter");
+        waitUntilPageLoad(driver);
         twitterSteps.shouldSeeLoginErrorBox();
         log.info("Should see login error box on Facebook login page");
     }
