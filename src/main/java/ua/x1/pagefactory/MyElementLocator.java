@@ -12,7 +12,7 @@ public class MyElementLocator extends DefaultElementLocator {
 
     @Override
     public WebElement findElement() {
-        throw new MyException("I'll never find any elements for you!");
+        throw new MyException("There are no elements");
     }
 
     public class MyException extends RuntimeException {

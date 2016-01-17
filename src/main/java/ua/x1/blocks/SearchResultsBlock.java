@@ -8,15 +8,15 @@ import ru.yandex.qatools.htmlelements.annotations.Name;
 import ru.yandex.qatools.htmlelements.element.*;
 
 @Name("Search results block")
-@FindBy(xpath = "//div[@class='srg']")
+@FindBy(xpath = "//div[@id='search']")
 public class SearchResultsBlock extends HtmlElement {
 
-	@Name("List of cite links")
-	@FindBy(xpath = ".//h3/a")
-	private List<Link> listOfCiteLinks;
+    @Name("List of cite links")
+    @FindBy(xpath = ".//div[@class='rc']//h3//a")
+    private List<Link> listOfCiteLinks;
 
-	public List<Link> getListOfCiteLinks() {
-		return listOfCiteLinks;
-	}
+    public List<Link> getListOfCiteLinks() {
+        return listOfCiteLinks;
+    }
 
 }

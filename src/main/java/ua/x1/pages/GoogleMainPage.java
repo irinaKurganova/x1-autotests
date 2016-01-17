@@ -8,20 +8,20 @@ import ua.x1.blocks.SearchResultsBlock;
 
 public class GoogleMainPage {
 
-	private SearchBlock searchBlock;
+    private SearchBlock searchBlock;
 
-	private SearchResultsBlock searchResultsBlock;
+    private SearchResultsBlock searchResultsBlock;
 
-	public GoogleMainPage(WebDriver driver) {
-		HtmlElementLoader.populatePageObject(this, driver);
-	}
+    public GoogleMainPage(WebDriver driver) {
+        HtmlElementLoader.populatePageObject(this, driver);
+    }
 
-	public SearchBlock getSearchBlock() {
-		return searchBlock;
-	}
+    public SearchBlock getSearchBlock() {
+        return searchBlock;
+    }
 
-	public SearchResultsBlock getSearchResultsBlock() {
-		return searchResultsBlock;
-	}
+    public SearchResultsBlock getSearchResultsBlock() {
+        return searchResultsBlock;
+    }
 
 }
